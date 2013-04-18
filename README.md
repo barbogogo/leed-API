@@ -3,7 +3,7 @@ leed-API
 
 API de l'agrégateur [leed](https://github.com/ldleman/Leed).
 
-Le but de cette API est de pouvoir suivre ses flux Leed via une application externe comme [LeedReader](https://github.com/barbogogo/leedReader) pour Android.
+Le but de cette API est de pouvoir suivre ses flux Leed via une application externe comme [LeedReader](http://projets.barbogogo.fr/wiki/LeedReader) pour Android.
 
 Installation
 ============
