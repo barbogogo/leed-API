@@ -92,21 +92,21 @@ switch($_REQUEST['option'])
         
         foreach($folders as $folder)
         {
-            $feeds = $allFeeds[$folder->getId()];
+            $feeds = $allFeeds['folderMap'][$folder->getId()];
             
-            foreach($feeds['folderMap'] as $title => $value)
+            foreach($feeds as $title => $value)
             {
                 
                 foreach($nbNoRead as $title2 => $value2)
                 {
                     if($title == $title2)
                     {
-                        $allFeeds[$folder->getId()][$title]['nbNoRead'] = $value2;
+                        $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = $value2;
                     }
                 }
             }
             
-            $feeds2 = $allFeeds[$folder->getId()];
+            $feeds2 = $allFeeds['folderMap'][$folder->getId()];
             
             $tab[$iTab] = array("id" => $folder->getId(), "titre" => $folder->getName(), "flux" => $feeds2);
             
