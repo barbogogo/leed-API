@@ -5,6 +5,8 @@
  @auteur: Barbogogo
  @description: Page de gestion des flus en json en vue d'une utilisation mobile
  */
+
+ define('API_VERSION','0.1');
  
 //Récuperation des dossiers de flux par ordre de nom
 $folders = $folderManager->populate('name');
@@ -73,6 +75,15 @@ switch($_REQUEST['option'])
         $event[0]->change(array('unread'=>'1'),array('id'=>$event[0]->getId()));
     break;
     
+    case "getVersions":
+    
+        $versions['API']  = API_VERSION;
+        $versions['Leed'] = VERSION_NUMBER." (".VERSION_NAME.")";
+    
+        echo "{\"versions\":", json_encode($versions), "}\n";
+    
+    break;
+    
     default:
         $tab = array();
         $iTab = 0;
@@ -83,7 +94,7 @@ switch($_REQUEST['option'])
         {
             $feeds = $allFeeds[$folder->getId()];
             
-            foreach($feeds as $title => $value)
+            foreach($feeds['folderMap'] as $title => $value)
             {
                 
                 foreach($nbNoRead as $title2 => $value2)
