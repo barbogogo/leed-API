@@ -1,3 +1,3 @@
 <?php
-define('PLUGIN_ENABLED','1');
+define('PLUGIN_ENABLED','0');
 ?>
