@@ -1,14 +1,14 @@
 leed-API
 ========
 
-API de l'agrégateur [leed](https://github.com/ldleman/Leed).
+Plugin permettant de faire une API pour l'agrégateur [leed](https://github.com/ldleman/Leed).
 
 Le but de cette API est de pouvoir suivre ses flux Leed via une application externe comme [LeedReader](http://projets.barbogogo.fr/wiki/LeedReader) pour Android.
 
 Installation
 ============
 
-L'API est installée en mettant le fichier json.php à la racine de l'agrégateur [leed](https://github.com/ldleman/Leed).
+Mettre le répertoire api dans le répertoire /plugins/ de l'agrégateur Leed.
 
 Utilisation
 ===========
