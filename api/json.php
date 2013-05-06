@@ -9,7 +9,7 @@
 require_once('../../common.php');
 require_once('./constantAPI.php');
 
-define('API_VERSION','0.1');
+define('API_VERSION','0.2');
  
 //Récuperation des dossiers de flux par ordre de nom
 $folders = $folderManager->populate('name');
@@ -22,6 +22,10 @@ $login = $_REQUEST['login'];
 $password = $_REQUEST['password'];
 
 $return11 = $user->exist($login, $password);
+
+header('Cache-Control: no-cache, must-revalidate');
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Content-type: application/json');
 
 if(PLUGIN_ENABLED == 1)
 {
@@ -59,7 +63,7 @@ if(PLUGIN_ENABLED == 1)
                 foreach($events as $event)
                 {
                     $tab[$iTab] = array("id" => $event->getId(), 
-                                        "title" => $event->getTitle(), 
+                                        "title" => html_entity_decode($event->getTitle(), ENT_NOQUOTES, 'UTF-8'), 
                                         "date" => $event->getPubdate("d/m/Y h:i"), 
                                         "urlArticle" => $event->getLink(), 
                                         "author" => $event->getCreator() );
