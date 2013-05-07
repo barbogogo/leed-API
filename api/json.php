@@ -66,7 +66,8 @@ if(PLUGIN_ENABLED == 1)
                                         "title" => html_entity_decode($event->getTitle(), ENT_NOQUOTES, 'UTF-8'), 
                                         "date" => $event->getPubdate("d/m/Y h:i"), 
                                         "urlArticle" => $event->getLink(), 
-                                        "author" => $event->getCreator() );
+                                        "author" => $event->getCreator(),
+                                        "favorite" => $event->getFavorite());
                     
                     $iTab ++;
                 }
