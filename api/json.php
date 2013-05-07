@@ -9,7 +9,7 @@
 require_once('../../common.php');
 require_once('./constantAPI.php');
 
-define('API_VERSION','0.2');
+define('API_VERSION','0.3');
  
 //Récuperation des dossiers de flux par ordre de nom
 $folders = $folderManager->populate('name');
@@ -91,6 +91,20 @@ if(PLUGIN_ENABLED == 1)
                 $event = $eventManager->loadAllOnlyColumn($target,array('id' => $_REQUEST['idArticle']));
                 // On met comme non lu le event
                 $event[0]->change(array('unread'=>'1'),array('id'=>$event[0]->getId()));
+            break;
+            
+            case "setFavorite":
+                $target = "*";
+                $event = $eventManager->loadAllOnlyColumn($target,array('id' => $_REQUEST['idArticle']));
+                // On met comme favori
+                $event[0]->change(array('favorite'=>'1'),array('id'=>$event[0]->getId()));
+            break;
+            
+            case "unsetFavorite":
+                $target = "*";
+                $event = $eventManager->loadAllOnlyColumn($target,array('id' => $_REQUEST['idArticle']));
+                // On met comme non favori
+                $event[0]->change(array('favorite'=>'0'),array('id'=>$event[0]->getId()));
             break;
             
             case "getVersions":
