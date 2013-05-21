@@ -54,8 +54,13 @@ if(PLUGIN_ENABLED == 1)
                 $target = "*";
                 
                 $idFeed = $_REQUEST['feedId'];
+                $nbMaxArticle = $_REQUEST['nbMaxArticle'];
+                $connectionType = $_REQUEST['connectionType'];
+                    $cOnLine  = 0;
+                    $cGetData = 1;
+                    $cOffLine = 2;
                 
-                $events = $eventManager->loadAllOnlyColumn($target,array('unread'=>1, 'feed'=>$idFeed),'pubDate DESC');
+                $events = $eventManager->loadAllOnlyColumn($target,array('unread'=>1, 'feed'=>$idFeed),'pubDate DESC', $nbMaxArticle);
                 
                 $tab = array();
                 $iTab = 0;
@@ -67,7 +72,13 @@ if(PLUGIN_ENABLED == 1)
                                         "date" => $event->getPubdate("d/m/Y h:i"), 
                                         "urlArticle" => $event->getLink(), 
                                         "author" => $event->getCreator(),
-                                        "favorite" => $event->getFavorite());
+                                        "favorite" => $event->getFavorite(),
+                                        "idFeed" => $idFeed);
+                    
+                    if($connectionType == $cGetData)
+                        $tab[$iTab]['content'] = $event->getContent();
+                    else
+                        $tab[$iTab]['content'] = "null";
                     
                     $iTab ++;
                 }
