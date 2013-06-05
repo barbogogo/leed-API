@@ -16,20 +16,13 @@ $folders = $folderManager->populate('name');
 //recuperation de tous les flux 
 $allFeeds = $feedManager->getFeedsPerFolder();
 
-$user = new User();
-
-$login = $_REQUEST['login'];
-$password = $_REQUEST['password'];
-
-$return11 = $user->exist($login, $password);
-
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Content-type: application/json');
 
 if(PLUGIN_ENABLED == 1)
 {
-    if($return11 != false)
+    if($myUser != false)
     {
         switch($_REQUEST['option'])
         {
@@ -179,4 +172,6 @@ else
     // Error#1: plugin disable
     echo "{\"error\":{\"id\":\"1\",\"message\":\"API disabled\"}}\n";
 }
+
 ?>
+
