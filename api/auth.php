@@ -7,11 +7,11 @@ function auth_check($realm) {
               strpos(strtolower($_SERVER['HTTP_AUTHENTICATION']), "digest") == 0) {
         $digest = substr($_SERVER['HTTP_AUTHORIZATION'], 7);
     }
-
+    
     if(!isset($digest)) {
         return false;
     }
-
+    
     // check digest string
     $needed_parts = array('nonce'=>1, 'nc'=>1, 'cnonce'=>1, 'qop'=>1, 'username'=>1,'uri'=>1, 'response'=>1);
     $data = array();
@@ -32,6 +32,7 @@ function auth_check($realm) {
     // user found ?
     $userMngr = new User();
     $user = $userMngr->load(array('login'=>$data['username']));
+    
     if(!$user) {
         return false;
     }
@@ -40,7 +41,7 @@ function auth_check($realm) {
 	$A1 = md5($data['username'] . ':' . $realm . ':' . $user->getPassword());
 	$A2 = md5($_SERVER['REQUEST_METHOD'].':'.$data['uri']);
     $resp = md5($A1.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
-
+    
     if($data['response'] != $resp) {
         return false;
     }

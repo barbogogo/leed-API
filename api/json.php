@@ -17,7 +17,7 @@ $folders = $folderManager->populate('name');
 $allFeeds = $feedManager->getFeedsPerFolder();
 
 header('Cache-Control: no-cache, must-revalidate');
-header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Expires:'.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
 header('Content-type: application/json');
 
 if(PLUGIN_ENABLED == 1)
