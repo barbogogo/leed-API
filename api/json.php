@@ -11,7 +11,7 @@ require_once('./constantAPI.php');
 
 define('API_VERSION','0.3');
  
-//Récuperation des dossiers de flux par ordre de nom
+//R?cuperation des dossiers de flux par ordre de nom
 $folders = $folderManager->populate('name');
 //recuperation de tous les flux 
 $allFeeds = $feedManager->getFeedsPerFolder();
@@ -42,7 +42,7 @@ if(PLUGIN_ENABLED == 1)
                 
                 $content = str_replace("%", "%25", $event[0]->getContent());
                 
-                echo "{\"content\":", json_encode($content, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE), "}\n";
+                echo "{\"content\":", json_encode($content), "}\n";
             
                 // On met comme lu le event
                 $event[0]->change(array('unread'=>'0'),array('id'=>$event[0]->getId()));
@@ -88,7 +88,7 @@ if(PLUGIN_ENABLED == 1)
                     $tab[$iTab] = array("id" => "0", "title" => "Pas d'article pour ce flux");
                 }
                 
-                echo "{\"articles\":", json_encode($tab, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE), "}\n";
+                echo "{\"articles\":", json_encode($tab), "}\n";
             break;
             
             case "setRead":
