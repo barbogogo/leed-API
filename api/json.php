@@ -66,7 +66,7 @@ if(PLUGIN_ENABLED == 1)
                                         "urlArticle" => $event->getLink(), 
                                         "author" => $event->getCreator(),
                                         "favorite" => $event->getFavorite(),
-                                        "idFeed" => $idFeed);
+                                        "idFeed" => $event->getFeed());
                     
                     if($connectionType == $cGetData)
                         $tab[$iTab]['content'] = $event->getContent();
@@ -79,6 +79,43 @@ if(PLUGIN_ENABLED == 1)
                 if($iTab == 0)
                 {
                     $tab[$iTab] = array("id" => "0", "title" => "Pas d'article pour ce flux");
+                }
+                
+                echo "{\"articles\":", json_encode($tab, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE), "}\n";
+            break;
+            
+            case "getUnread":
+                
+                $target = "*";
+                
+                $nbMaxArticle = $_REQUEST['nbMaxArticle'];
+                
+                $events = $eventManager->loadAllOnlyColumn($target,array('unread'=>1),'pubDate DESC', $nbMaxArticle);
+                
+                $tab = array();
+                $iTab = 0;
+                
+                foreach($events as $event)
+                {
+                    $tab[$iTab] = array("id" => $event->getId(), 
+                                        "title" => html_entity_decode($event->getTitle(), ENT_NOQUOTES, 'UTF-8'), 
+                                        "date" => $event->getPubdate("d/m/Y h:i"), 
+                                        "urlArticle" => $event->getLink(), 
+                                        "author" => $event->getCreator(),
+                                        "favorite" => $event->getFavorite(),
+                                        "idFeed" => $event->getFeed());
+                    
+                    if($connectionType == $cGetData)
+                        $tab[$iTab]['content'] = $event->getContent();
+                    else
+                        $tab[$iTab]['content'] = "null";
+                    
+                    $iTab ++;
+                }
+                
+                if($iTab == 0)
+                {
+                    $tab[$iTab] = array("id" => "0", "title" => "Pas d'article non lus");
                 }
                 
                 echo "{\"articles\":", json_encode($tab, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE), "}\n";
@@ -133,7 +170,7 @@ if(PLUGIN_ENABLED == 1)
                     
                     foreach($feeds as $title => $value)
                     {
-                        
+                        $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = 0;
                         foreach($nbNoRead as $title2 => $value2)
                         {
                             if($title == $title2)
