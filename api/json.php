@@ -8,6 +8,7 @@
 
 require_once('../../common.php');
 require_once('./constantAPI.php');
+require_once('./phpError.php');
 
 define('API_VERSION','0.3');
  
@@ -19,6 +20,8 @@ $allFeeds = $feedManager->getFeedsPerFolder();
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires:'.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
 header('Content-type: application/json');
+
+$jsonOutput = "";
 
 if(PLUGIN_ENABLED == 1)
 {
@@ -35,7 +38,7 @@ if(PLUGIN_ENABLED == 1)
                 
                 $content = str_replace("%", "%25", $event[0]->getContent());
                 
-                echo "{\"content\":", json_encode($content, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE), "}\n";
+                $jsonOutput = "{\"content\":".json_encode($content, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)."}\n";
             
                 // On met comme lu le event
                 $event[0]->change(array('unread'=>'0'),array('id'=>$event[0]->getId()));
@@ -81,7 +84,7 @@ if(PLUGIN_ENABLED == 1)
                     $tab[$iTab] = array("id" => "0", "title" => "Pas d'article pour ce flux");
                 }
                 
-                echo "{\"articles\":", json_encode($tab, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE), "}\n";
+                $jsonOutput = "{\"articles\":".json_encode($tab, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)."}\n";
             break;
             
             case "getUnread":
@@ -105,10 +108,7 @@ if(PLUGIN_ENABLED == 1)
                                         "favorite" => $event->getFavorite(),
                                         "idFeed" => $event->getFeed());
                     
-                    if($connectionType == $cGetData)
-                        $tab[$iTab]['content'] = $event->getContent();
-                    else
-                        $tab[$iTab]['content'] = "null";
+                    $tab[$iTab]['content'] = $event->getContent();
                     
                     $iTab ++;
                 }
@@ -118,7 +118,7 @@ if(PLUGIN_ENABLED == 1)
                     $tab[$iTab] = array("id" => "0", "title" => "Pas d'article non lus");
                 }
                 
-                echo "{\"articles\":", json_encode($tab, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE), "}\n";
+                $jsonOutput = "{\"articles\":".json_encode($tab, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)."}\n";
             break;
             
             case "setRead":
@@ -154,7 +154,7 @@ if(PLUGIN_ENABLED == 1)
                 $versions['API']  = API_VERSION;
                 $versions['Leed'] = VERSION_NUMBER." (".VERSION_NAME.")";
             
-                echo "{\"versions\":", json_encode($versions), "}\n";
+                $jsonOutput = "{\"versions\":".json_encode($versions)."}\n";
             
             break;
             
@@ -187,13 +187,13 @@ if(PLUGIN_ENABLED == 1)
                     $iTab ++;
                 }
 
-                echo "{\"folders\":", json_encode($tab), "}\n";
+                $jsonOutput = "{\"folders\":".json_encode($tab)."}\n";
             break;
             
             default:
             
                 // Error#0: no eror
-                echo "{\"error\":{\"id\":\"0\",\"message\":\"no error\"}}\n";
+                $jsonOutput = "{\"error\":{\"id\":\"0\",\"message\":\"no error\"}}\n";
             
             break;
         }
@@ -201,13 +201,22 @@ if(PLUGIN_ENABLED == 1)
     else
     {
         // Error#2: login failed
-        echo "{\"error\":{\"id\":\"2\",\"message\":\"login failed\"}}\n";
+        $jsonOutput = "{\"error\":{\"id\":\"2\",\"message\":\"login failed\"}}\n";
     }
 }
 else
 {
     // Error#1: plugin disable
-    echo "{\"error\":{\"id\":\"1\",\"message\":\"API disabled\"}}\n";
+    $jsonOutput = "{\"error\":{\"id\":\"1\",\"message\":\"API disabled\"}}\n";
+}
+
+if($isErrorPHP == true)
+{
+    echo $msgErrorPHP;
+}
+else
+{
+    echo $jsonOutput;
 }
 
 ?>
