@@ -19,10 +19,21 @@ function userErrorHandler($errno, $errmsg, $filename, $linenum, $vars)
             2048=>"Note inconnue"
             );
     
-    $erreur = $errortype[$errno]."[".$errno."]".$errmsg. "- ".$filename."(l".$linenum.")";
+    $phpVersion = phpversion();
+    $jsonVersion = phpversion('json');
+    $mysqlVersion = phpversion('mysql');
     
-    echo "{\"error\":{\"id\":\"3\",\"message\":\"PHP error: ".$erreur."\"}}\n";
-    // global $isErrorPHP = true;
+    $erreur  = "<h1>PHP Error</h1>";
+    $erreur .= "<p>".$errortype[$errno]."[".$errno."]".$errmsg. "- ".$filename."(l".$linenum.")</p>";
+    $erreur .= "<p>Your server configuration:</p>";
+    $erreur .= "<ul>";
+    $erreur .= "<li>PHP Version: ".$phpVersion."</li>";
+    $erreur .= "<li>JSON Version: ".$jsonVersion."</li>";
+    $erreur .= "<li>MySQL Version: ".$mysqlVersion."</li>";
+    $erreur .= "</ul>";
+    
+    $GLOBALS["msgErrorPHP"] = "{\"error\":{\"id\":\"3\",\"message\":\"".$erreur."\"}}\n";
+    $GLOBALS["isErrorPHP"] = true;
 }
 
 unset($old_error_handler);
