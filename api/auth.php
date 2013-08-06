@@ -9,6 +9,7 @@ function auth_check($realm) {
     }
     
     if(!isset($digest)) {
+        $GLOBALS["authError"] = "Digest vide";
         return false;
     }
     
@@ -26,6 +27,7 @@ function auth_check($realm) {
 
     // digest string is not valid
     if(count($needed_parts) > 0) {
+        $GLOBALS["authError"] = "Digest invalide";
         return false;
     }
 
@@ -34,15 +36,17 @@ function auth_check($realm) {
     $user = $userMngr->load(array('login'=>$data['username']));
     
     if(!$user) {
+        $GLOBALS["authError"] = "Utilisateur inconnu";
         return false;
     }
-
+    
     // check credentials
 	$A1 = md5($data['username'] . ':' . $realm . ':' . $user->getPassword());
 	$A2 = md5($_SERVER['REQUEST_METHOD'].':'.$data['uri']);
     $resp = md5($A1.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
     
     if($data['response'] != $resp) {
+        $GLOBALS["authError"] = "Echec de l'authentification";
         return false;
     }
 
@@ -52,7 +56,7 @@ function auth_check($realm) {
 function auth_request($realm) {
     header("WWW-Authenticate: Digest realm=\"$realm\",qop=\"auth\",nonce=\"".uniqid()."\",opaque=\"".session_id()."\"");
     header("HTTP/1.0 401 Unauthorized");
-    echo "{\"error\":{\"id\":\"2\",\"message\":\"login failed\"}}\n";
+    echo "{\"error\":{\"id\":\"2\",\"message\":\"<h1>login failed</h1><p>".$GLOBALS["authError"]."</p>\"}}\n";
 
     die();
 }

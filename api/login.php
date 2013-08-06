@@ -7,6 +7,8 @@ require_once('./phpError.php');
 
 $realm = $_SERVER['SERVER_NAME'];
 
+$authError = "";
+
 if(!$myUser && !($myUser = auth_check($realm))) 
 {
    auth_request($realm);
