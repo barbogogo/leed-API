@@ -24,7 +24,7 @@ function userErrorHandler($errno, $errmsg, $filename, $linenum, $vars)
     $mysqlVersion = phpversion('mysql');
     
     $erreur  = "<h1>PHP Error</h1>";
-    $erreur .= "<p>".$errortype[$errno]."[".$errno."]".$errmsg. "- ".$filename."(l".$linenum.")</p>";
+    $erreur .= "<p>".$errortype[$errno]."[".$errno."]".$errmsg. "- ".$filename."(l.".$linenum.")</p>";
     $erreur .= "<p>Your server configuration:</p>";
     $erreur .= "<ul>";
     $erreur .= "<li>PHP Version: ".$phpVersion."</li>";

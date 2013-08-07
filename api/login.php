@@ -26,6 +26,10 @@ $_SESSION['currentUser'] = serialize($myUser);
 if($isErrorPHP == true)
 {
     echo $msgErrorPHP;
+    
+    $_SESSION = array();
+    session_unset();
+    session_destroy();
 }
 else
 {
