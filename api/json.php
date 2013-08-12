@@ -10,7 +10,7 @@ require_once('../../common.php');
 require_once('./constantAPI.php');
 require_once('./phpError.php');
 
-define('API_VERSION','0.3');
+define('API_VERSION','0.8');
  
 //Récuperation des dossiers de flux par ordre de nom
 $folders = $folderManager->populate('name');
