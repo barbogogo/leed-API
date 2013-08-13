@@ -10,7 +10,7 @@ require_once('../../common.php');
 require_once('./constantAPI.php');
 require_once('./phpError.php');
 
-define('API_VERSION','0.8');
+define('API_VERSION','0.9');
  
 //Récuperation des dossiers de flux par ordre de nom
 $folders = $folderManager->populate('name');
@@ -188,6 +188,24 @@ if(PLUGIN_ENABLED == 1)
                 }
 
                 $jsonOutput = "{\"folders\":".json_encode($tab)."}\n";
+            break;
+            
+            case "setFeedRead":
+                $target = "*";
+                $event = $eventManager->loadAllOnlyColumn($target,array('feed' => $_REQUEST['idFeed']));
+                for($i = 0 ; $i < sizeof($event) ; $i++)
+                {
+                    $event[$i]->change(array('unread'=>'0'),array('id'=>$event[$i]->getId()));
+                }
+            break;
+            
+            case "setAllRead":
+                $target = "*";
+                $event = $eventManager->loadAll(null);
+                for($i = 0 ; $i < sizeof($event) ; $i++)
+                {
+                    $event[$i]->change(array('unread'=>'0'),array('id'=>$event[$i]->getId()));
+                }
             break;
             
             default:
