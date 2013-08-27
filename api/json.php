@@ -27,7 +27,13 @@ if(PLUGIN_ENABLED == 1)
 {
     if($myUser != false)
     {
-        switch($_REQUEST['option'])
+    
+        if(isset($_REQUEST['option']) && $_REQUEST['option'] != "")
+            $option = $_REQUEST['option'];
+        else
+            $option = "";
+    
+        switch($option)
         {
 
             case "article":
@@ -177,25 +183,29 @@ if(PLUGIN_ENABLED == 1)
                 
                 foreach($folders as $folder)
                 {
-                    $feeds = $allFeeds['folderMap'][$folder->getId()];
-                    
-                    foreach($feeds as $title => $value)
+                    if(isset($allFeeds['folderMap'][$folder->getId()]))
                     {
-                        $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = 0;
-                        foreach($nbNoRead as $title2 => $value2)
+                        $feeds = $allFeeds['folderMap'][$folder->getId()];
+                        
+                        foreach($feeds as $title => $value)
                         {
-                            if($title == $title2)
+                            $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = 0;
+                            foreach($nbNoRead as $title2 => $value2)
                             {
-                                $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = $value2;
+                                if($title == $title2)
+                                {
+                                    $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = $value2;
+                                }
                             }
                         }
+                        
+                        
+                        $feeds2 = $allFeeds['folderMap'][$folder->getId()];
+                        
+                        $tab[$iTab] = array("id" => $folder->getId(), "titre" => $folder->getName(), "flux" => $feeds2);
+                        
+                        $iTab ++;
                     }
-                    
-                    $feeds2 = $allFeeds['folderMap'][$folder->getId()];
-                    
-                    $tab[$iTab] = array("id" => $folder->getId(), "titre" => $folder->getName(), "flux" => $feeds2);
-                    
-                    $iTab ++;
                 }
 
                 $jsonOutput = "{\"folders\":".json_encode($tab)."}\n";
