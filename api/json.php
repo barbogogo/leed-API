@@ -1,10 +1,10 @@
 <?php
 
 /*
- @nom: API
- @auteur: Barbogogo
- @description: Page de gestion des flux en json en vue d'une utilisation externe
- */
+@nom: API
+@auteur: Barbogogo
+@description: Page de gestion des flux en json en vue d'une utilisation externe
+*/
 
 require_once('../../common.php');
 require_once('./constantAPI.php');
@@ -14,7 +14,7 @@ define('API_VERSION','0.9');
  
 //Récuperation des dossiers de flux par ordre de nom
 $folders = $folderManager->populate('name');
-//recuperation de tous les flux 
+//recuperation de tous les flux
 $allFeeds = $feedManager->getFeedsPerFolder();
 
 header('Cache-Control: no-cache, must-revalidate');
@@ -52,11 +52,17 @@ if(PLUGIN_ENABLED == 1)
                 $idFeed = $_REQUEST['feedId'];
                 $nbMaxArticle = $_REQUEST['nbMaxArticle'];
                 $connectionType = $_REQUEST['connectionType'];
+                
+                if(isset($_REQUEST['offset']) && $_REQUEST['offset'] != "")
+                    $limitSql = $_REQUEST['offset'].", ".$nbMaxArticle;
+                else
+                    $limitSql = $nbMaxArticle;
+                
                     $cOnLine  = 0;
                     $cGetData = 1;
                     $cOffLine = 2;
                 
-                $events = $eventManager->loadAllOnlyColumn($target,array('unread'=>1, 'feed'=>$idFeed),'pubDate DESC', $nbMaxArticle);
+                $events = $eventManager->loadAllOnlyColumn($target,array('unread'=>1, 'feed'=>$idFeed),'pubDate DESC', $limitSql);
                 
                 $tab = array();
                 $iTab = 0;
@@ -93,7 +99,12 @@ if(PLUGIN_ENABLED == 1)
                 
                 $nbMaxArticle = $_REQUEST['nbMaxArticle'];
                 
-                $events = $eventManager->loadAllOnlyColumn($target,array('unread'=>1),'pubDate DESC', $nbMaxArticle);
+                if(isset($_REQUEST['offset']) && $_REQUEST['offset'] != "")
+                    $limitSql = $_REQUEST['offset'].", ".$nbMaxArticle;
+                else
+                    $limitSql = $nbMaxArticle;
+                
+                $events = $eventManager->loadAllOnlyColumn($target,array('unread'=>1),'pubDate DESC', $limitSql);
                 
                 $tab = array();
                 $iTab = 0;
@@ -151,7 +162,7 @@ if(PLUGIN_ENABLED == 1)
             
             case "getVersions":
             
-                $versions['API']  = API_VERSION;
+                $versions['API'] = API_VERSION;
                 $versions['Leed'] = VERSION_NUMBER." (".VERSION_NAME.")";
             
                 $jsonOutput = "{\"versions\":".json_encode($versions)."}\n";
