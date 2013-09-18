@@ -33,6 +33,8 @@ if(PLUGIN_ENABLED == 1)
         else
             $option = "";
     
+        $unreadOnly = FALSE;
+
         switch($option)
         {
 
@@ -175,9 +177,13 @@ if(PLUGIN_ENABLED == 1)
             
             break;
             
+            case "getUnreadFolders":
+		$unreadOnly = TRUE;
+            
             case "getFolders":
                 $tab = array();
                 $iTab = 0;
+                if (isset($_REQUEST['unreadOnly'])) $unreadOnly = $_REQUEST['unreadOnly'];
                 
                 $nbNoRead = $feedManager->countUnreadEvents();
                 
@@ -189,13 +195,14 @@ if(PLUGIN_ENABLED == 1)
                         
                         foreach($feeds as $title => $value)
                         {
-                            $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = 0;
-                            foreach($nbNoRead as $title2 => $value2)
+			    $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = 0;
+                            if (isset($nbNoRead[$title]))
                             {
-                                if($title == $title2)
-                                {
-                                    $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = $value2;
-                                }
+                                $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = $nbNoRead[$title]*1;
+                            }
+                            else
+                            {
+                                if ($unreadOnly) unset($allFeeds['folderMap'][$folder->getId()][$title]);
                             }
                         }
                         
@@ -209,6 +216,7 @@ if(PLUGIN_ENABLED == 1)
                 }
 
                 $jsonOutput = "{\"folders\":".json_encode($tab)."}\n";
+
             break;
             
             case "setFeedRead":
