@@ -75,6 +75,8 @@ if(PLUGIN_ENABLED == 1)
                 $tab = array();
                 $iTab = 0;
                 
+                $feed = $feedManager->loadAllOnlyColumn($target,array('id'=>$idFeed),'', '');
+                
                 foreach($events as $event)
                 {
                     $tab[$iTab] = array("id" => $event->getId(), 
@@ -84,6 +86,9 @@ if(PLUGIN_ENABLED == 1)
                                         "author" => $event->getCreator(),
                                         "favorite" => $event->getFavorite(),
                                         "idFeed" => $event->getFeed());
+                    
+                    $tab[$iTab]['nameFeed'] = $feed[0]->getName();
+                    $tab[$iTab]['urlFeed'] = $feed[0]->getUrl();
                     
                     if($connectionType == $cGetData)
                         $tab[$iTab]['content'] = $event->getContent();
@@ -119,6 +124,8 @@ if(PLUGIN_ENABLED == 1)
                 
                 foreach($events as $event)
                 {
+                    $feed = $feedManager->loadAllOnlyColumn($target,array('id'=>$event->getFeed()),'', '');
+                    
                     $tab[$iTab] = array("id" => $event->getId(), 
                                         "title" => html_entity_decode($event->getTitle(), ENT_NOQUOTES, 'UTF-8'), 
                                         "date" => $event->getPubdate("d/m/Y h:i"), 
@@ -126,6 +133,9 @@ if(PLUGIN_ENABLED == 1)
                                         "author" => $event->getCreator(),
                                         "favorite" => $event->getFavorite(),
                                         "idFeed" => $event->getFeed());
+                    
+                    $tab[$iTab]['nameFeed'] = $feed[0]->getName();
+                    $tab[$iTab]['urlFeed'] = $feed[0]->getUrl();
                     
                     $tab[$iTab]['content'] = $event->getContent();
                     
@@ -178,7 +188,7 @@ if(PLUGIN_ENABLED == 1)
             break;
             
             case "getUnreadFolders":
-		$unreadOnly = TRUE;
+            $unreadOnly = TRUE;
             
             case "getFolders":
                 $tab = array();
@@ -195,7 +205,7 @@ if(PLUGIN_ENABLED == 1)
                         
                         foreach($feeds as $title => $value)
                         {
-			    $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = 0;
+                            $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = 0;
                             if (isset($nbNoRead[$title]))
                             {
                                 $allFeeds['folderMap'][$folder->getId()][$title]['nbNoRead'] = $nbNoRead[$title]*1;
@@ -205,7 +215,6 @@ if(PLUGIN_ENABLED == 1)
                                 if ($unreadOnly) unset($allFeeds['folderMap'][$folder->getId()][$title]);
                             }
                         }
-                        
                         
                         $feeds2 = $allFeeds['folderMap'][$folder->getId()];
                         
