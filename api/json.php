@@ -6,7 +6,7 @@
 @description: Page de gestion des flux en json en vue d'une utilisation externe
 */
 
-require_once('../../common.php');
+require_once('./commonAPI.php');
 require_once('./constantAPI.php');
 require_once('./phpError.php');
 

@@ -10,7 +10,7 @@ function auth_check($realm) {
 
     if(isset($_REQUEST['login']) && $_REQUEST['login'] != "" ||
        isset($_REQUEST['password']) && $_REQUEST['password'] != "")
-    {
+    {    
         $userMngr = new User();
         $user = $userMngr->load(array('login'=>$_REQUEST['login']));
         
@@ -19,7 +19,7 @@ function auth_check($realm) {
             return false;
         }
         
-        if($user->getPassword() == $_REQUEST['password']) {
+        if(sha1(KEY) == $_REQUEST['password']) {
             return $user;
         }
         else {
@@ -69,7 +69,7 @@ function auth_check($realm) {
         }
         
         // check credentials
-        $A1 = md5($data['username'] . ':' . $realm . ':' . $user->getPassword());
+        $A1 = md5($data['username'] . ':' . $realm . ':' . sha1(KEY));
         $A2 = md5($_SERVER['REQUEST_METHOD'].':'.$data['uri']);
         $resp = md5($A1.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
         

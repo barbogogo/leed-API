@@ -1,0 +1,6 @@
+{
+ "P_LEEDAPI_TITLE":"Plugin Leed API",
+ "P_LEEDAPI_SUBTITLE":"Informations",
+ "P_LEEDAPI_DESCRIPTION_KEY":"Afin de vous connecter à l'API, la clé ci-dessous doit être renseignée dans l'application (LeedReader) en tant que mot de passe. Le mot de passe utiliser pour vous connecter à Leed ne fonctionne pas pour utiliser l'API. Cette clé est générée de façon aléatoire à chaque fois que vous activez le plugin API. Vous pouvez toutefois la modifier manuellement dans leed/plugings/api/constantAPI.php (variable KEY).",
+ "P_LEEDAPI_TEXT_KEY":"La clé vous permettant de vous connecter via l'API est :"
+}

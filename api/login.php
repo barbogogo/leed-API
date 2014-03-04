@@ -1,6 +1,6 @@
 <?php
 
-require_once('../../common.php');
+require_once('./commonAPI.php');
 require_once('./constantAPI.php');
 require_once('./auth.php');
 require_once('./phpError.php');
