@@ -10,11 +10,11 @@
 
 require_once('./plugins/api/constantAPI.php');
 
-function leedStats_plugin_setting_link(&$myUser){
+function api_plugin_setting_link(&$myUser){
 echo '<li><a class="toggle" href="#leedAPIBloc">'._t('P_LEEDAPI_TITLE').'</a></li>';
 }
 
-function leedStats_plugin_setting_bloc(&$myUser)
+function api_plugin_setting_bloc(&$myUser)
 {
     echo '
         <section id="leedAPIBloc" class="leedAPIBloc" style="display:none;">
@@ -39,7 +39,7 @@ function leedStats_plugin_setting_bloc(&$myUser)
 $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
 if($myUser!=false) 
 {
-    Plugin::addHook('setting_post_link', 'leedStats_plugin_setting_link');
-    Plugin::addHook('setting_post_section', 'leedStats_plugin_setting_bloc');
+    Plugin::addHook('setting_post_link', 'api_plugin_setting_link');
+    Plugin::addHook('setting_post_section', 'api_plugin_setting_bloc');
 }
 ?>
